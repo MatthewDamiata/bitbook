@@ -1,0 +1,21 @@
+{
+	"manifest_version": 3,
+	"name": "bitbook",
+  "author": "Matthew Damiata",
+	"version": "0.1",
+	"description": "Map crypto addresses to names. Whenever that address appears on screen, hover over it to see the name.",
+  "permissions": [
+    "storage"
+  ],
+  "action": {
+    "default_popup": "popup.html"
+  },
+  "content_scripts":
+	[
+		{
+      "matches": ["*://*/*"],
+			"js": ["script.js"],
+			"run_at": "document_end"
+		}
+	]
+}
