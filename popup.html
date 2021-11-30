@@ -1,17 +1,24 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>BitBook</title>
+    <title>bitbook</title>
     <script src="popup.js"></script>
   </head>
   <body>
-    <h1>BitBook</h1>
-    <div">
+    <h1><u>bitbook</u></h1>
+    <div>
+      <h4 style="color: red;">
+        <span id="errors"></span>
+      </h4>
       <h3>Address</h3>
       <input type="text" name="address" id="address"></input>
       <h3>Name</h3>
       <input type="text" name="name" id="name"></input>
       <button id='submit'>Submit</button>
+      <h3>Current Mappings</h3>
+      <h4>
+        <ul id="mappings"></ul>
+      </h4>
     </div>
   </body>
 </html>

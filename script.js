@@ -1,60 +1,50 @@
-
-function setup(){
-
-  let globalDict = {}
-
-  // get key/value pairs from storage and store in globalDict
-  chrome.storage.sync.get(function(result) {
-    globalDict = result;
+// Handles text replacement
+function handleText(nodeList){
+  chrome.storage.sync.get(null, function(result) {
+    nodeList.forEach((node) => {
+      let v = node.nodeValue;
+      if(v in result){
+        let re = new RegExp(v, "g");
+        v = v.replace(re, "[bitbook: " + result[v] + "] " + v);
+        node.nodeValue = v;
+      }
+    });
   });
 
-  if(!globalDict){
-    return
-  }
-  console.log("setup: " + globalDict);
-
-  walk(document.body, globalDict);
 }
 
 // Function to traverse DOM and grab nodetype 3 elements.
 // https://stackoverflow.com/questions/5904914/javascript-regex-to-replace-text-not-in-html-attributes/5904945#5904945
-function walk(node, globalDict){
+function walk(node, nodeList){
 
 	let child, next;
 
-	switch ( node.nodeType )
-	{
+	switch(node.nodeType){
 		case 1:
 		case 9:
 		case 11:
 			child = node.firstChild;
-			while ( child )
-			{
+			while(child){
 				next = child.nextSibling;
-				walk(child);
+				walk(child, nodeList);
 				child = next;
 			}
 			break;
 
 		case 3:
-			handleText(node, globalDict);
+			nodeList.push(node);
 			break;
 	}
+
 }
 
-// Handles text replacement
-function handleText(textNode, globalDict){
+function setup(){
 
-	let v = textNode.nodeValue;
+  let nodeList = [];
 
-  console.log(globalDict);
-  for (const [key, value] of Object.entries(globalDict)) {
-    let replace = key;
-    let re = new RegExp(replace, "g");
-    v = v.replace(re, value);
-    textNode.nodeValue = v;
-  }
+  walk(document.body, nodeList);
 
+  handleText(nodeList)
 }
 
 // runs on document end
